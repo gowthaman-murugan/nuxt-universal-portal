@@ -2,6 +2,7 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
+  ssr: false,
   head: {
     titleTemplate: '%s - portal-ssr',
     title: 'portal-ssr',
@@ -21,7 +22,9 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [
+    // '~/plugins/axios'
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -41,11 +44,30 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
+  // https://axios.nuxtjs.org/options/
   axios: {
-    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/',
+    proxy: true,
+    debug: true,
+    headers: {
+      common: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      //   delete: {},
+      //   get: {},
+      //   head: {},
+      //   post: {},
+      //   put: {},
+      //   patch: {}
+    },
   },
-
+  proxy: {
+    '/api/': {
+      target: 'http://localhost:8080',
+      pathRewrite: { '^/api/': '' },
+      debug: true,
+    },
+  },
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
